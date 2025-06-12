@@ -1,0 +1,9 @@
+logging:
+  level:
+    root: info
+
+spring:
+  application:
+    name: patient-service
+server:
+  port: 4000
