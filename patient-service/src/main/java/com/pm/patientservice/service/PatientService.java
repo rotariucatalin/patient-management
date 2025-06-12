@@ -2,6 +2,7 @@ package com.pm.patientservice.service;
 
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
+import com.pm.patientservice.grpc.BillingServiceGrpcClient;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
     public List<PatientResponseDTO> getAllPatients() {
         return patientRepository.findAll()
@@ -26,6 +28,10 @@ public class PatientService {
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
         Patient patientCreated = patientRepository.save(PatientMapper.INSTANCE.patientRequestDtoToEntity(patientRequestDTO));
+
+         billingServiceGrpcClient.createBillingAccount(patientCreated.getId().toString(),
+                patientCreated.getName(), patientCreated.getEmail());
+
         return PatientMapper.INSTANCE.patientToDto(patientCreated);
     }
 }
