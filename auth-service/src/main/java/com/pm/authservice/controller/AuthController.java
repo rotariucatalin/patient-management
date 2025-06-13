@@ -1,0 +1,31 @@
+package com.pm.authservice.controller;
+
+import com.pm.authservice.dto.LoginRequestDTO;
+import com.pm.authservice.dto.LoginResponseDTO;
+import com.pm.authservice.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
+
+@RestController
+@AllArgsConstructor
+public class AuthController {
+
+    private final AuthService authService;
+
+    @Operation(summary = "Generate token on user login")
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+
+        Optional<String> tokenOptional = authService.authenticate(loginRequestDTO);
+        String token = tokenOptional.get();
+
+        return  ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+}
