@@ -9,13 +9,13 @@ spring:
           predicates:
             - Path=/api/patients/**
           filters:
-            - Strip-Prefix=1
+            - StripPrefix=1
         - id: api-docs-patient-service
           uri: http://patient-service:4000
           predicates:
             - Path=/api-docs/patients
           filters:
-            - Rewrite-Path=/api-docs/patients,/v3/api-docs
+            - RewritePath=/api-docs/patients,/v3/api-docs
 
 server:
   port: 4004
